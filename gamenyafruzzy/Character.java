@@ -1,74 +1,127 @@
-import java.util.List;
+// Character.java
+
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Character {
-    // Atribut dasar (sesuai permintaan)
     protected String name;
-    protected int maxHp;
-    protected int hp;
-    protected int defense;
-    protected int magicDef;
-    protected int physAtk;
-    protected int magicAtk;
-    protected int evasion; // dalam persen (5 = 5%)
+    protected int maxHP;
+    protected int currentHP;
+    protected int pAtk;
+    protected int mAtk;
+    protected int pDef;
+    protected int mDef;
+    protected int evasion;
     protected int flaskCount;
 
-    // Status efek (contoh)
-    protected int tempDefBoost = 0;
-    protected int tempEvasionBoost = 0;
-    protected boolean cantDie = false;
+    protected List<Skill> skills;
 
-    // Constructor
-    public Character(String name, int hp, int defense, int magicDef, 
-                    int physAtk, int magicAtk, int evasion, int flaskCount) {
+    public Character(String name, int maxHP, int pAtk, int mAtk, int pDef, int mDef, int evasion, int flaskCount) {
         this.name = name;
-        this.maxHp = this.hp = hp;
-        this.defense = defense;
-        this.magicDef = magicDef;
-        this.physAtk = physAtk;
-        this.magicAtk = magicAtk;
+        this.maxHP = maxHP;
+        this.currentHP = maxHP;
+        this.pAtk = pAtk;
+        this.mAtk = mAtk;
+        this.pDef = pDef;
+        this.mDef = mDef;
         this.evasion = evasion;
         this.flaskCount = flaskCount;
+        this.skills = new ArrayList<>();
     }
 
-    // === Method Dasar ===
-    public boolean useFlask() {
-        if (flaskCount > 0 && hp < maxHp) {
-            hp = Math.min(hp + 5, maxHp);
-            flaskCount--;
-            System.out.println(name + " memakai flask! +5 HP.");
-            return true;
-        }
-        System.out.println("Flask tidak bisa digunakan!");
-        return false;
+    // ================== Basic Getters ==================
+    public String getName() {
+        return name;
     }
+
+    public int getCurrentHP() {
+        return currentHP;
+    }
+
+    public int getMaxHP() {
+        return maxHP;
+    }
+
+    public int getPAtk() {
+        return pAtk;
+    }
+
+    public int getMAtk() {
+        return mAtk;
+    }
+
+    public int getPDef() {
+        return pDef;
+    }
+
+    public int getMDef() {
+        return mDef;
+    }
+
+    public int getEvasion() {
+        return evasion;
+    }
+
+    public int getFlaskCount() {
+        return flaskCount;
+    }
+
+    public List<Skill> getSkills() {
+        return skills;
+    }
+
+    // ================== Battle Logic ==================
 
     public void takeDamage(int damage) {
-        if (cantDie && hp - damage < 1) {
-            hp = 1;
-            cantDie = false;
-            System.out.println(name + " bertahan di 1 HP!");
-        } else {
-            hp -= damage;
-            System.out.println(name + " menerima " + damage + " damage!");
-        }
+        currentHP -= damage;
+        if (currentHP < 0) currentHP = 0;
+    }
+
+    public void heal(int amount) {
+        currentHP += amount;
+        if (currentHP > maxHP) currentHP = maxHP;
     }
 
     public boolean isAlive() {
-        return hp > 0;
+        return currentHP > 0;
     }
 
-    // Method abstract untuk skill (akan di-override di subclass)
-    public abstract void useSkill(int skillIndex, Character target);
-
-    // Method untuk attack dasar
-    public void basicAttack(Character target) {
-        int hitChance = 100 - target.evasion - target.tempEvasionBoost;
-        if (new Random().nextInt(100) < hitChance) {
-            int damage = Math.max(1, physAtk - target.defense);
-            target.takeDamage(damage);
+    public void useFlask() {
+        if (flaskCount > 0) {
+            heal(5);
+            flaskCount--;
+            System.out.println(name + " used a flask and recovered 5 HP.");
         } else {
-            System.out.println(name + " meleset!");
+            System.out.println(name + " has no flasks left!");
         }
     }
+
+    public void resetBattleStatus() {
+        currentHP = maxHP;
+        for (Skill s : skills) {
+            s.resetAll();
+        }
+    }
+
+    public void reduceSkillCooldowns() {
+        for (Skill s : skills) {
+            s.reduceCooldown();
+        }
+    }
+
+    // ================== Skill Management ==================
+
+    public void addSkill(Skill skill) {
+        skills.add(skill);
+    }
+
+    public void listSkills() {
+        int i = 1;
+        for (Skill s : skills) {
+            System.out.println(i + ". " + s.toString());
+            i++;
+        }
+    }
+
+    public abstract void displayStats();
 }
