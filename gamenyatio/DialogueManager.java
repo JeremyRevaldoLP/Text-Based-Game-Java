@@ -24,7 +24,7 @@ public class DialogueManager {
         }
 
         if (speaker != null) {
-            System.out.println("(Tekan Enter untuk melanjutkan...)");
+            System.out.println("(Press enter to continue...)");
             scanner.nextLine(); // Gunakan scanner yang dikirim dari Main
         }
     }
