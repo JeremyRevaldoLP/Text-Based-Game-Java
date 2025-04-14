@@ -64,7 +64,7 @@ public class Inventory {
     public void useItem(Item item, Pokemon target) {
         int index = items.indexOf(item);
         if (index != -1) {
-            useItem(index, target);
+            useItem(item, target);
         } else {
             System.out.println("Can't find the item.");
         }

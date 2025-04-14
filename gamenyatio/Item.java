@@ -5,16 +5,16 @@ public class Item {
     private String effect;   // Misal: "increase_attack", "increase_defense"
     private int power;       // Berapa besar pengaruh efek
 
-    // Constructor untuk item penyembuh (tanpa efek)
+    // Constructor untuk item penyembuh (misal Potion)
     public Item(String name, String description, int healAmount) {
         this.name = name;
         this.description = description;
         this.healAmount = healAmount;
-        this.effect = null;
-        this.power = 0;
+        this.effect = "heal";
+        this.power = healAmount;
     }
 
-    // Constructor untuk item dengan efek (tanpa heal)
+    // Constructor untuk item dengan efek (misal X Attack)
     public Item(String name, String description, String effect, int power) {
         this.name = name;
         this.description = description;
@@ -41,5 +41,14 @@ public class Item {
 
     public int getPower() {
         return power;
+    }
+
+    @Override
+    public String toString() {
+        if (effect != null) {
+            return name + " - " + effect + " (" + power + ")";
+        } else {
+            return name + " - heals " + healAmount + " HP";
+        }
     }
 }
