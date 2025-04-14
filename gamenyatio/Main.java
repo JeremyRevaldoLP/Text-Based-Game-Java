@@ -6,36 +6,35 @@ public class Main {
         String playerName;
 
         try (Scanner scanner = new Scanner(System.in)) {
-            DialogueManager.say(null, "Cerita dimulai pada saat kamu tiba di Littleroot Town yaitu kampung halamanmu.", scanner);
+            DialogueManager.say(null, "The story begins as you arrive at Littleroot Town, your hometown.", scanner);
 
-            System.out.print("Masukkan nama karaktermu: ");
+            System.out.print("Enter your character's name: ");
             playerName = scanner.nextLine();
 
-            DialogueManager.say(playerName, "Aku pulang, Ibu!", scanner);
-            DialogueManager.say("Mom", "Wah, sudah lama tidak ketemu anakku. Kamu sudah mendengar dari Professor Jack kalau kamu akan menjadi Pokémon Trainer?", scanner);
-            DialogueManager.say(playerName, "Ya, aku tahu.", scanner);
-            DialogueManager.say("Mom", "Baiklah, simpan dulu barang-barangmu dan pergilah ke laboratoriumnya.", scanner);
-            DialogueManager.say(playerName, "Baik, Ibu.", scanner);
-            DialogueManager.say(null, "Kamu menyimpan barang-barangmu.", scanner);
-            DialogueManager.say(playerName, "Baiklah, aku harus pergi ke lab sekarang.", scanner);
+            DialogueManager.say(playerName, "I'm home, Mom!", scanner);
+            DialogueManager.say("Mom", "Wow, it's been a while since I’ve seen my child. Have you heard from Professor Jack that you're going to become a Pokémon Trainer?", scanner);
+            DialogueManager.say(playerName, "Yes, I know.", scanner);
+            DialogueManager.say("Mom", "Alright, put your things away first and then head to his lab.", scanner);
+            DialogueManager.say(playerName, "Okay, Mom.", scanner);
+            DialogueManager.say(null, "You put away your belongings.", scanner);
+            DialogueManager.say(playerName, "Alright, I need to go to the lab now.", scanner);
 
-            DialogueManager.say(null, "Sesampainya di lab...", scanner);
-            DialogueManager.say(playerName, "Halo Profesor Jack, sudah lama tidak ketemu.", scanner);
-            DialogueManager.say("Prof. Jack", "Wohoo... " + playerName + ", kamu sudah sampai.", scanner);
-            DialogueManager.say(playerName, "Ya, aku tidak sabar bertemu dengan Pokémonku.", scanner);
-            DialogueManager.say("Prof. Jack", "Baiklah, aku mempunyai 3 Pokémon di sini. Kamu bisa memilih yang mana saja, tapi hanya satu saja.", scanner);
-            System.out.println("1. Oshawott (water type pokemon)");
-            System.out.println("2. Charmander (fire type pokemon)");
-            System.out.println("3. Sprigatito (grass type pokemon)");
+            DialogueManager.say(null, "Upon arriving at the lab...", scanner);
+            DialogueManager.say(playerName, "Hello Professor Jack, long time no see.", scanner);
+            DialogueManager.say("Prof. Jack", "Wohoo... " + playerName + ", you're here.", scanner);
+            DialogueManager.say(playerName, "Yes, I can’t wait to meet my Pokémon.", scanner);
+            DialogueManager.say("Prof. Jack", "Alright, I have 3 Pokémon here. You can choose any one, but only one.", scanner);
+            System.out.println("1. Oshawott (water type Pokémon)");
+            System.out.println("2. Charmander (fire type Pokémon)");
+            System.out.println("3. Sprigatito (grass type Pokémon)");
 
-            System.out.print("Pilih Pokémon kamu (1-3): ");
+            System.out.print("Choose your Pokémon (1-3): ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // buang newline
+            scanner.nextLine(); // consume newline
 
             Pokemon chosen = null;
             Pokemon rivalPokemon = null;
 
-            // Pilihan Pokémon player dan rival otomatis counter
             if (choice == 1) { // Oshawott
                 chosen = new Pokemon("Oshawott", "Water", 80, 12, 8,
                     Arrays.asList(
@@ -88,21 +87,20 @@ public class Main {
                     )
                 );
             }
-            
 
-            DialogueManager.say(null, "Setelah memilih Pokémon pertamamu, kamu memegang Pokéball tersebut dengan rasa bangga.", scanner);
-            DialogueManager.say("Prof. Jack", "Itu pilihan yang bagus! Rawat dia baik-baik, ya.", scanner);
-            DialogueManager.say("Prof. Jack", "Sebagai pelatih baru, kamu akan memulai perjalananmu dari sini. Tapi...", scanner);
-            DialogueManager.say("Prof. Jack", "... kamu harus bertarung sekali dulu sebelum benar-benar siap.", scanner);
+            DialogueManager.say(null, "After choosing your first Pokémon, you hold the Pokéball proudly.", scanner);
+            DialogueManager.say("Prof. Jack", "That's a great choice! Take good care of it, okay?", scanner);
+            DialogueManager.say("Prof. Jack", "As a new trainer, your journey starts here. But...", scanner);
+            DialogueManager.say("Prof. Jack", "... you have to battle once before you’re truly ready.", scanner);
 
-            DialogueManager.say(null, "Tiba-tiba, seorang anak muncul dari pintu laboratorium.", scanner);
-            DialogueManager.say("???", "Heh, jadi kamu yang katanya pelatih baru?", scanner);
-            DialogueManager.say(null, "Seorang rival bernama Irun muncul dengan ekspresi percaya diri.", scanner);
-            DialogueManager.say("Irun", "Namaku Irun. Kalau kamu serius mau jadi pelatih, tunjukkan kemampuanmu!", scanner);
-            DialogueManager.say(playerName, "Baik, aku tidak takut!", scanner);
-            DialogueManager.say(null, "Pertarungan pertamamu dimulai!", scanner);
+            DialogueManager.say(null, "Suddenly, a kid appears from the lab's door.", scanner);
+            DialogueManager.say("???", "Heh, so you're the so-called new trainer?", scanner);
+            DialogueManager.say(null, "A rival named Irun appears with a confident expression.", scanner);
+            DialogueManager.say("Irun", "My name is Irun. If you're serious about being a trainer, show me what you've got!", scanner);
+            DialogueManager.say(playerName, "Alright, I'm not afraid!", scanner);
+            DialogueManager.say(null, "Your first battle begins!", scanner);
 
-            BattleManager.startBattle(playerName, chosen, rivalPokemon, "Irun");
+            BattleManager.startBattle(playerName, chosen, rivalPokemon, "Irun", false);
         }
     }
 }
