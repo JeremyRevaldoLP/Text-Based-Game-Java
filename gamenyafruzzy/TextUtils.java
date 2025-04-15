@@ -13,6 +13,6 @@ public class TextUtils {
 
     // Overload dengan delay default
     public static void typeWriter(String text) {
-        typeWriter(text, 30); // 30 ms per karakter (bisa diubah sesuai selera)
+        typeWriter(text, 30); // 30 ms per karakterr
     }
 }
