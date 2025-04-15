@@ -2,21 +2,21 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        // Gunakan DialogueManager untuk interaksi dengan pemain
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("=== Takut dan Lapar ===");
-        System.out.print("Masukkan nama karaktermu: ");
+        DialogueManager.showDialogue("Narrator", "=== Takut dan Lapar ===");
+        
+        // Meminta nama karakter dengan DialogueManager
+        DialogueManager.showDialogue("Narrator", "Masukkan nama karaktermu: ");
         String name = scanner.nextLine();
 
-        System.out.println("\nPilih kelas karaktermu:");
-        System.out.println("1. Guard");
-        System.out.println("2. Primitive Man");
-        System.out.println("3. Scholarmancer");
-        System.out.println("4. Prisoner");
-        System.out.print("Pilihanmu (1-4): ");
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Buat hapus newline
-
+        // Memilih kelas karakter menggunakan DialogueManager
+        DialogueManager.showDialogue("Narrator", "\nPilih kelas karaktermu:");
+        String[] classes = {"Guard", "Primitive Man", "Scholarmancer", "Prisoner"};
+        
+        int choice = DialogueManager.showChoiceDialogue("Narrator", "Pilihanmu (1-4):", classes);
+        
         Character player;
 
         switch (choice) {
@@ -33,14 +33,15 @@ public class Main {
                 player = new Prisoner(name);
                 break;
             default:
-                System.out.println("Pilihan tidak valid. Kamu menjadi Guard secara default.");
+                DialogueManager.showDialogue("Narrator", "Pilihan tidak valid. Kamu menjadi Guard secara default.");
                 player = new Guard(name);
         }
 
-        System.out.println("\nKarakter berhasil dibuat!");
-        System.out.println(player);
+        // Menampilkan informasi karakter yang telah dipilih
+        DialogueManager.showDialogue("Narrator", "\nKarakter berhasil dibuat!");
+        DialogueManager.showDialogue("Narrator", player.toString());
 
-        // Lanjut ke cerita
+        // Lanjut ke cerita dengan menggunakan DialogueManager
         Story.startIntro(player);
 
         // Agar tidak terjadi memory leak
