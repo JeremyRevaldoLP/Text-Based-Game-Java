@@ -39,7 +39,33 @@ public class Story {
 
         System.out.println("\n--- Petualangan dimulai... ---");
 
-        // Di sini nanti kita lanjut ke pertarungan musuh biasa
-        // BattleSystem.startBattle(player, enemy1);
+        // Musuh pertama
+        Enemy enemy1 = new Enemy("Rotten Soldier", 50, 10);
+        BattleSystem.startBattle(player, enemy1);
+
+        // Musuh kedua
+        if (player.getHealth() > 0) {
+            Enemy enemy2 = new Enemy("Twisted Hound", 60, 12);
+            BattleSystem.startBattle(player, enemy2);
+        }
+
+        // Musuh ketiga
+        if (player.getHealth() > 0) {
+            Enemy enemy3 = new Enemy("Dark Priest", 70, 13);
+            BattleSystem.startBattle(player, enemy3);
+        }
+
+        // Boss terakhir
+        if (player.getHealth() > 0) {
+            Boss finalBoss = new Boss("Ancient Horror", 100, 15, "Doom Gaze");
+            BattleSystem.startBattle(player, finalBoss);
+        }
+
+        // Ending
+        if (player.getHealth() > 0) {
+            System.out.println("\n--- Kamu berhasil keluar dari kegelapan... Tamat! ---");
+        } else {
+            System.out.println("\n--- Kegelapan menelammu... Tamat. ---");
+        }   
     }
 }
