@@ -5,7 +5,10 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         TextUtils.typeWriter("=== Takut dan Lapar ===");
-        System.out.print("Masukkan nama karaktermu: ");
+        TextUtils.typeWriter("Kegelapan menyelimuti tempat ini...");
+
+        TextUtils.typeWriter("Masukkan nama karaktermu:");
+        System.out.print("> ");
         String name = scanner.nextLine();
 
         TextUtils.typeWriter("\nPilih kelas karaktermu:");
@@ -15,7 +18,7 @@ public class Main {
         TextUtils.typeWriter("4. Prisoner");
         System.out.print("Pilihanmu (1-4): ");
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Buat hapus newline
+        scanner.nextLine(); // Menghapus newline
 
         Character player;
 
@@ -33,12 +36,16 @@ public class Main {
                 player = new Prisoner(name);
                 break;
             default:
-                TextUtils.typeWriter("Pilihan tidak valid. Kamu menjadi Guard secara default.");
+                TextUtils.typeWriter("Pilihan tidak dikenal. Kamu terbangun sebagai Guard.");
                 player = new Guard(name);
         }
 
-        TextUtils.typeWriter("\nKarakter berhasil dibuat!");
-        System.out.println(player);
+        TextUtils.typeWriter("\nKarakter berhasil diciptakan.");
+        TextUtils.typeWriter("Nama: " + player.getName());
+        TextUtils.typeWriter("Kelas: " + player.getClass().getSimpleName());
+        TextUtils.typeWriter("HP: " + player.getHealth());
+
+        TextUtils.typeWriter("\nPetualanganmu segera dimulai...");
 
         // Lanjut ke cerita
         Story.startIntro(player);

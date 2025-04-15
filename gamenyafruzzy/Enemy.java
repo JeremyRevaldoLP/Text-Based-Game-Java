@@ -1,12 +1,20 @@
 public class Enemy {
     protected String name;
     protected int health;
-    protected int damage;
+    protected int defense;
+    protected int magicDefense;
+    protected int physicalAttack;
+    protected int magicAttack;
+    protected int evasion;
 
-    public Enemy(String name, int health, int damage) {
+    public Enemy(String name, int health, int defense, int magicDefense, int physicalAttack, int magicAttack, int evasion) {
         this.name = name;
         this.health = health;
-        this.damage = damage;
+        this.defense = defense;
+        this.magicDefense = magicDefense;
+        this.physicalAttack = physicalAttack;
+        this.magicAttack = magicAttack;
+        this.evasion = evasion;
     }
 
     public String getName() {
@@ -15,6 +23,26 @@ public class Enemy {
 
     public int getHealth() {
         return health;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public int getMagicDefense() {
+        return magicDefense;
+    }
+
+    public int getPhysicalAttack() {
+        return physicalAttack;
+    }
+
+    public int getMagicAttack() {
+        return magicAttack;
+    }
+
+    public int getEvasion() {
+        return evasion;
     }
 
     public void takeDamage(int amount) {
@@ -27,7 +55,7 @@ public class Enemy {
     }
 
     public int attack() {
-        return damage;
+        return physicalAttack; // menggunakan physical attack sebagai dasar serangan
     }
 
     @Override

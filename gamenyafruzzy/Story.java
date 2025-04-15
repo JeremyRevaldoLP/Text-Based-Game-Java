@@ -4,6 +4,7 @@ public class Story {
 
     public static void startIntro(Character player) {
         Scanner scanner = new Scanner(System.in);
+
         TextUtils.typeWriter("\n--- Prolog ---");
         TextUtils.typeWriter("Kamu terbangun di sebuah ruang bawah tanah gelap. Ada tiga jalan di depanmu.");
 
@@ -39,35 +40,21 @@ public class Story {
 
         TextUtils.typeWriter("\n--- Petualangan dimulai... ---");
 
-        // Musuh pertama
-        Enemy enemy1 = new Enemy("Rotten Soldier", 50, 10);
-        BattleSystem.startBattle(player, enemy1);
+        // Lanjut ke musuh pertama
+        BattleSystem.startBattle(player, new Enemy("Rotten Soldier", 35, 10, 2, 7, 0, 2));
 
-        // Musuh kedua
-        if (player.getHealth() > 0) {
-            Enemy enemy2 = new Enemy("Twisted Hound", 60, 12);
-            BattleSystem.startBattle(player, enemy2);
-        }
+        // Lanjut ke musuh kedua
+        TextUtils.typeWriter("\nKamu melanjutkan perjalananmu dan bertemu dengan musuh baru...");
+        BattleSystem.startBattle(player, new Enemy("Primitive Beast", 28, 3, 10, 4, 7, 3));
 
-        // Musuh ketiga
-        if (player.getHealth() > 0) {
-            Enemy enemy3 = new Enemy("Dark Priest", 70, 13);
-            BattleSystem.startBattle(player, enemy3);
-        }
+        // Lanjut ke musuh ketiga
+        TextUtils.typeWriter("\nMusuh lain muncul di depanmu...");
+        BattleSystem.startBattle(player, new Enemy("Guardian", 26, 4, 4, 6, 0, 10));
 
-        // Boss terakhir
-        if (player.getHealth() > 0) {
-            Boss finalBoss = new Boss("Ancient Horror", 100, 15, "Doom Gaze");
-            BattleSystem.startBattle(player, finalBoss);
-        }
+        // Lanjut ke boss
+        TextUtils.typeWriter("\nAkhirnya, kamu sampai pada ujian terakhir...");
+        BattleSystem.startBattle(player, new Boss("Dark Lord", 65, 6, 6, 10, 10, 4, "Soul Burn"));
 
-        // Ending
-        if (player.getHealth() > 0) {
-            TextUtils.typeWriter("\n--- Kamu berhasil keluar dari kegelapan... Tamat! ---");
-        } else {
-            TextUtils.typeWriter("\n--- Kegelapan menelammu... Tamat. ---");
-        }
-        
         // Agar tidak terjadi memory leak
         scanner.close();
     }
