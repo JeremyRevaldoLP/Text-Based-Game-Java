@@ -115,6 +115,7 @@ public class Main {
             BattleManager.startBattle(playerName, chosen, rivalPokemon, "Irun", false);
 
             // After the battle, Professor Jack talks to both players
+            DialogueManager.say(null, "=============", scanner);
             DialogueManager.say("Prof. Jack", "Both of you are doing amazing, I hope you two can become Pokemon champions.", scanner);
             DialogueManager.say("Prof. Jack", "But sadly, the Pokemon Champion title is only for one person.", scanner);
             DialogueManager.say("Prof. Jack", "Now go, start your journey and come back when you become a Pokemon Champion.", scanner);
@@ -141,7 +142,7 @@ public class Main {
                 switch (routeChoice) {
                     case 1:
                         DialogueManager.say(null, "You head towards Route 138. The air is fresh, and the tall grass shakes as you walk. You might encounter wild Pokemon here.", scanner);
-                        EncounterWildPokemon(scanner, chosen); // Pass the chosen Pokemon for battle
+                        EncounterWildPokemon(scanner, chosen, playerName); // Pass the chosen Pokemon for battle
                         continueJourney = false; // Exit after the encounter
                         break;
                     case 2:
@@ -161,7 +162,8 @@ public class Main {
         }
     }
 
-    private static void EncounterWildPokemon(Scanner scanner, Pokemon chosen) {
+      // Method EncounterWildPokemon yang sudah diperbarui
+      private static void EncounterWildPokemon(Scanner scanner, Pokemon chosen, String playerName) {
         String[] wildPokemon = {"Pidgey", "Wurmple", "Zigzagoon", "Ralts"};
         int randomIndex = (int) (Math.random() * wildPokemon.length);
         String wildPokemonName = wildPokemon[randomIndex];
@@ -170,6 +172,8 @@ public class Main {
 
         // Create a wild Pokemon instance and initiate the battle
         Pokemon wildPokemonInstance = new Pokemon(wildPokemonName, "Normal", 50, 10, 5, Arrays.asList(new Move("Tackle", "Normal", 10)));
-        BattleManager.startBattle("Wild Pokemon", chosen, wildPokemonInstance, wildPokemonName, true);
+
+        // Use playerName for the sender in the battle
+        BattleManager.startBattle(playerName, chosen, wildPokemonInstance, wildPokemonName, true);
     }
 }

@@ -7,14 +7,25 @@ public class BattleManager {
     private static final Random random = new Random();
 
     public static void startBattle(String playerName, Pokemon playerPokemon, Pokemon rivalPokemon, String rivalName, boolean isWildBattle) {
-        System.out.println("\n--- Battle start! ---");
-        System.out.println(playerName + " Sending " + playerPokemon.name + "!");
-        System.out.println(rivalName + " Sending " + rivalPokemon.name + "!");
+        System.out.println("\n--- Battle Start! ---");
+
+        if (isWildBattle) {
+            // Pokémon liar muncul
+            DialogueManager.sayAuto(null, "A wild " + rivalPokemon.name + " appeared!");
+            // Pemain mengirimkan Pokémon mereka
+            DialogueManager.sayAuto(playerName, playerName + " sending " + playerPokemon.name + "!");
+        } else {
+            // Battle antar trainer
+            DialogueManager.sayAuto(playerName, playerName + " sending " + playerPokemon.name + "!");
+            DialogueManager.sayAuto(rivalName, rivalName + " sending " + rivalPokemon.name + "!");
+        }
 
         playerPokemon.resetBuffs();
         rivalPokemon.resetBuffs();
 
+        // Loop Battle
         while (playerPokemon.isAlive() && rivalPokemon.isAlive()) {
+            // Giliran Pemain
             System.out.println("\n--- " + playerName + "'s Turn ---");
             System.out.println("What would you do?");
             System.out.println("1. Attack");
@@ -55,33 +66,36 @@ public class BattleManager {
 
             if (!rivalPokemon.isAlive()) break;
 
+            // Giliran Rival
             System.out.println("\n--- " + rivalName + "'s Turn ---");
             List<Move> rivalMoves = rivalPokemon.moves;
             Move rivalMove = rivalMoves.get(random.nextInt(rivalMoves.size()));
             DialogueManager.sayAuto(rivalName, rivalPokemon.name + " uses " + rivalMove.name + "!");
             processMove(rivalMove, rivalPokemon, playerPokemon, rivalName);
 
+            // Status Update
             System.out.println("\nStatus:");
             System.out.println(playerPokemon.name + " HP: " + playerPokemon.hp + ", ATK: " + playerPokemon.attack + ", DEF: " + playerPokemon.defense);
             System.out.println(rivalPokemon.name + " HP: " + rivalPokemon.hp + ", ATK: " + rivalPokemon.attack + ", DEF: " + rivalPokemon.defense);
         }
 
+        // End of Battle
         System.out.println("\n--- The battle ended ---");
         if (playerPokemon.isAlive()) {
             System.out.println(playerName + " won!");
-        
+
             int expGained;
             if (isWildBattle) {
-                expGained = 5 + random.nextInt(3); // 5 to 7 EXP
+                expGained = 5 + random.nextInt(3); // 5 to 7 EXP for wild battles
             } else {
-                expGained = 10 + random.nextInt(6); // 10 to 15 EXP for trainer/rival battles
+                expGained = 10 + random.nextInt(6); // 10 to 15 EXP for trainer battles
             }
-        
+
             playerPokemon.gainExp(expGained);
         } else {
-            System.out.println(rivalName + " won!");}
+            System.out.println(rivalName + " won!");
         }
-        
+    }
 
     private static void processMove(Move move, Pokemon attacker, Pokemon defender, String attackerName) {
         if (move.effect != null) {
@@ -128,6 +142,7 @@ public class BattleManager {
             }
         }
 
+        // Calculate Damage
         int damage = calculateDamage(move, attacker, defender);
         defender.hp -= damage;
         if (defender.hp < 0) defender.hp = 0;
@@ -138,14 +153,18 @@ public class BattleManager {
         int damage = move.power + attacker.attack - defender.defense;
         damage = Math.max(1, damage);
 
+        // Super Effective
         if (isSuperEffective(move.type, defender.type)) {
             DialogueManager.sayAuto(null, "It's super effective!");
             damage += random.nextInt(4) + 3;
-        } else if (isNotVeryEffective(move.type, defender.type)) {
+        } 
+        // Not Very Effective
+        else if (isNotVeryEffective(move.type, defender.type)) {
             DialogueManager.sayAuto(null, "It's not very effective...");
             damage /= 2;
         }
 
+        // Critical Hit
         if (random.nextDouble() < 0.1) {
             DialogueManager.sayAuto(null, "Critical hit!");
             damage *= 1.5;
