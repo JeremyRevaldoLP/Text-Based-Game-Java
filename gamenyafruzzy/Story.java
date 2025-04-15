@@ -4,12 +4,12 @@ public class Story {
 
     public static void startIntro(Character player) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("\n--- Prolog ---");
-        System.out.println("Kamu terbangun di sebuah ruang bawah tanah gelap. Ada tiga jalan di depanmu.");
+        TextUtils.typeWriter("\n--- Prolog ---");
+        TextUtils.typeWriter("Kamu terbangun di sebuah ruang bawah tanah gelap. Ada tiga jalan di depanmu.");
 
-        System.out.println("1. Masuk ke lorong dengan cahaya redup.");
-        System.out.println("2. Masuk ke ruangan dengan bau busuk.");
-        System.out.println("3. Ikuti suara bisikan dari kegelapan.");
+        TextUtils.typeWriter("1. Masuk ke lorong dengan cahaya redup.");
+        TextUtils.typeWriter("2. Masuk ke ruangan dengan bau busuk.");
+        TextUtils.typeWriter("3. Ikuti suara bisikan dari kegelapan.");
 
         System.out.print("Pilih jalurmu (1-3): ");
         int choice = scanner.nextInt();
@@ -17,27 +17,27 @@ public class Story {
 
         switch (choice) {
             case 1:
-                System.out.println("Kamu menemukan simbol sihir di lantai.");
+                TextUtils.typeWriter("Kamu menemukan simbol sihir di lantai.");
                 player.getSkills().add(new Skill("Arcane Touch", "Sentuhan magis yang melemahkan musuh", 2));
                 break;
             case 2:
-                System.out.println("Kamu menginjak perangkap dan belajar menghindari bahaya.");
+                TextUtils.typeWriter("Kamu menginjak perangkap dan belajar menghindari bahaya.");
                 player.getSkills().add(new Skill("Trap Sense", "Menghindari serangan pertama", 3));
                 break;
             case 3:
-                System.out.println("Bisikan itu mengajarkanmu teknik terlarang.");
+                TextUtils.typeWriter("Bisikan itu mengajarkanmu teknik terlarang.");
                 player.getSkills().add(new Skill("Forbidden Chant", "Skill misterius dengan efek acak", 4));
                 break;
             default:
-                System.out.println("Kamu ragu dan hanya diam. Tidak ada skill tambahan.");
+                TextUtils.typeWriter("Kamu ragu dan hanya diam. Tidak ada skill tambahan.");
         }
 
-        System.out.println("\nSkill-skill yang kamu miliki:");
+        TextUtils.typeWriter("\nSkill-skill yang kamu miliki:");
         for (Skill skill : player.getSkills()) {
-            System.out.println("- " + skill);
+            TextUtils.typeWriter("- " + skill);
         }
 
-        System.out.println("\n--- Petualangan dimulai... ---");
+        TextUtils.typeWriter("\n--- Petualangan dimulai... ---");
 
         // Musuh pertama
         Enemy enemy1 = new Enemy("Rotten Soldier", 50, 10);
@@ -63,9 +63,9 @@ public class Story {
 
         // Ending
         if (player.getHealth() > 0) {
-            System.out.println("\n--- Kamu berhasil keluar dari kegelapan... Tamat! ---");
+            TextUtils.typeWriter("\n--- Kamu berhasil keluar dari kegelapan... Tamat! ---");
         } else {
-            System.out.println("\n--- Kegelapan menelammu... Tamat. ---");
+            TextUtils.typeWriter("\n--- Kegelapan menelammu... Tamat. ---");
         }
         
         // Agar tidak terjadi memory leak
