@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("=== Fear and Hunger: Lite ===");
+        System.out.println("=== Takut dan Lapar ===");
         System.out.print("Masukkan nama karaktermu: ");
         String name = scanner.nextLine();
 
@@ -42,5 +42,8 @@ public class Main {
 
         // Lanjut ke cerita
         Story.startIntro(player);
+
+        // Agar tidak terjadi memory leak
+        scanner.close();
     }
 }

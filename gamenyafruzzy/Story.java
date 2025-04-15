@@ -66,6 +66,9 @@ public class Story {
             System.out.println("\n--- Kamu berhasil keluar dari kegelapan... Tamat! ---");
         } else {
             System.out.println("\n--- Kegelapan menelammu... Tamat. ---");
-        }   
+        }
+        
+        // Agar tidak terjadi memory leak
+        scanner.close();
     }
 }

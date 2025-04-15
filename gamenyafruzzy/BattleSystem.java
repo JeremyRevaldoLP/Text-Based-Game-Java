@@ -52,5 +52,8 @@ public class BattleSystem {
         if (player.getHealth() <= 0) {
             System.out.println("Kamu kalah...");
         }
+
+        // Agar tidak terjadi memory leak
+        scanner.close();
     }
 }
