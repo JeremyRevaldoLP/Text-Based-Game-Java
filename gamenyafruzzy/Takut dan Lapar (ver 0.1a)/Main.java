@@ -3,43 +3,47 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        BattleManager battleManager = new BattleManager(scanner);
         
-        showTitle();
-        
-        TextUtils.typeWriter("\nA voice echoes in your head...", 50);
-        TextUtils.typeWriter("The fear and hunger dungeon slowly corrupt your mind...", 40);
-        TextUtils.typeWriter("Enter your name: ", 30);
-        String playerName = scanner.nextLine();
-        
-        TextUtils.typeWriter("\nThe chains here rattle as you try to remember your past...", 60);
-        Character player = chooseClass(scanner, playerName);
-        
-        Character enemy1 = new Character("Rotten Guard", 60, 12, 0);
-        Character boss = new Character("Crippled Warden", 110, 22, 0);
-        
-        TextUtils.typeWriter("\nThe stench of decay fills the air...", 70);
-        TextUtils.typeWriter("A guard shambles toward you!", 30);
-        TextUtils.typeWriter("Its rusted sword gleams dully...", 50);
-        battleManager.battle(player, enemy1);
-        
-        if (player.isAlive()) {
-            TextUtils.typeWriter("\nYou run desperately, searching for an escape from this hell...", 70);
-            TextUtils.typeWriter("Your thoughts fracture as you try to comprehend this twisted dungeon", 30);
-            TextUtils.typeWriter("A terrifying presence emerges from the shadows.", 50);
-            battleManager.battle(player, boss);
+        // Main game loop
+        while(true) {
+            showTitle(scanner); // Pass scanner to title screen
+            
+            // Game setup
+            TextUtils.typeWriter("\nA voice echoes in your head...", 50);
+            TextUtils.typeWriter("The fear and hunger dungeon slowly corrupt your mind...", 40);
+            TextUtils.typeWriter("Enter your name: ", 30);
+            String playerName = scanner.nextLine();
+            
+            TextUtils.typeWriter("\nThe chains here rattle as you try to remember your past...", 60);
+            Character player = chooseClass(scanner, playerName);
+            
+            // Create enemies
+            Character enemy1 = new Character("Rotten Guard", 60, 12, 0);
+            Character boss = new Character("Crippled Warden", 110, 22, 0);
+            
+            // Battle sequence
+            TextUtils.typeWriter("\nThe stench of decay fills the air...", 70);
+            TextUtils.typeWriter("A guard shambles toward you!", 30);
+            TextUtils.typeWriter("Its rusted sword gleams dully...", 50);
+            
+            BattleManager battleManager = new BattleManager(scanner);
+            battleManager.battle(player, enemy1);
+            
+            if (player.isAlive()) {
+                TextUtils.typeWriter("\nYou run desperately, searching for an escape from this hell...", 70);
+                TextUtils.typeWriter("Your thoughts fracture as you try to comprehend this twisted dungeon", 30);
+                TextUtils.typeWriter("A terrifying presence emerges from the shadows.", 50);
+                battleManager.battle(player, boss);
+            }
+            
+            if (player.isAlive()) {
+                showVictory(playerName);
+                // Will automatically loop back to title screen
+            }
         }
-        
-        if (player.isAlive()) {
-            showVictory(player.name);
-        }
-
-        scanner.close();
     }
 
-    private static void showTitle() {
-        Scanner scanner = new Scanner(System.in);
-        
+    private static void showTitle(Scanner scanner) {
         System.out.println("====================================");
         TextUtils.typeWriter("     F E A R  A N D  H U N G E R    ", 40);
         System.out.println("====================================");
@@ -47,21 +51,18 @@ public class Main {
         try {
             Thread.sleep(1000);
             
-            // Main menu loop
-            while (true) {
-                TextUtils.typeWriter("\n1. Play", 30);
-                TextUtils.typeWriter("2. Quit", 30);
-                TextUtils.typeWriter("Enter your choice (1-2): ", 20);
-                
-                int choice = getValidMenuChoice(scanner);
-                
-                if (choice == 1) {
-                    return; // Continue to game
-                } else {
-                    TextUtils.typeWriter("\nThe fear and hunger let you go...", 50);
-                    System.exit(0); // Quit game
-                }
+            // Menu selection
+            TextUtils.typeWriter("\n1. Play", 30);
+            TextUtils.typeWriter("2. Quit", 30);
+            TextUtils.typeWriter("Enter your choice (1-2): ", 20);
+            
+            int choice = getValidMenuChoice(scanner);
+            
+            if (choice == 2) {
+                TextUtils.typeWriter("\nThe fear and hunger lets you go...", 50);
+                System.exit(0);
             }
+            
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
