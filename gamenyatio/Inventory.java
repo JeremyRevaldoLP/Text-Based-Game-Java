@@ -3,13 +3,12 @@ import java.util.List;
 
 public class Inventory {
     private List<Item> items;
-    
 
     public Inventory() {
         this.items = new ArrayList<>();
-        // Contoh isi awal inventory
-        items.add(new Item("Potion", "heal", 20));
-        items.add(new Item("X Attack", "increase_attack", 0));
+        items.add(new Item("Potion", "Heals 20 HP", 20));
+        items.add(new Item("X Attack", "Increases attack", "increase_attack", 2));
+        items.add(new Item("X Defense", "Increases defense", "increase_defense", 2));
     }
 
     public void showInventory() {
@@ -18,7 +17,7 @@ public class Inventory {
         } else {
             for (int i = 0; i < items.size(); i++) {
                 Item item = items.get(i);
-                System.out.println((i + 1) + ". " + item.getName() + " - " + item.getEffect());
+                System.out.println((i + 1) + ". " + item);
             }
         }
     }
@@ -30,44 +29,47 @@ public class Inventory {
     public void useItem(int index, Pokemon target) {
         if (index >= 0 && index < items.size()) {
             Item item = items.get(index);
-            switch (item.getEffect()) {
-                case "heal":
-                    target.heal(item.getPower());
-                    System.out.println(target.name + " healed " + item.getPower() + " HP!");
-                    break;
-                case "increase_attack":
-                    if (target.attackBuffCount < 2) {
-                        target.attack += 2;
-                        target.attackBuffCount++;
-                        System.out.println(target.name + " Increased ATK!");
-                    } else {
-                        System.out.println(target.name + " can't increased ATK anymore!");
-                    }
-                    break;
-                case "increase_defense":
-                    if (target.defenseBuffCount < 2) {
-                        target.defense += 2;
-                        target.defenseBuffCount++;
-                        System.out.println(target.name + " Increased DEF!");
-                    } else {
-                        System.out.println(target.name + " can't increased DEF anymore!");
-                    }
-                    break;
-                default:
-                    System.out.println("Unknown item effect.");
+
+            if (item.getQuantity() <= 0) {
+                System.out.println("You don't have any more " + item.toString());
+                return;
             }
-            items.remove(index); // Item hanya bisa dipakai sekali
+
+            if (item.getHealAmount() > 0) {
+                target.heal(item.getHealAmount());
+            } else {
+                switch (item.getEffect()) {
+                    case "increase_attack":
+                        if (target.attackBuffCount < 2) {
+                            target.attack += item.getPower();
+                            target.attackBuffCount++;
+                            System.out.println(target.name + " increased ATK!");
+                        } else {
+                            System.out.println(target.name + " can't increase ATK anymore!");
+                        }
+                        break;
+                    case "increase_defense":
+                        if (target.defenseBuffCount < 2) {
+                            target.defense += item.getPower();
+                            target.defenseBuffCount++;
+                            System.out.println(target.name + " increased DEF!");
+                        } else {
+                            System.out.println(target.name + " can't increase DEF anymore!");
+                        }
+                        break;
+                    default:
+                        System.out.println("Unknown item effect.");
+                }
+            }
+
+            item.decreaseQuantity(1);
+
+            if (item.getQuantity() <= 0) {
+                items.remove(index);
+            }
+
         } else {
-            System.out.println("It's not working.");
+            System.out.println("Invalid item choice.");
         }
     }
-    public void useItem(Item item, Pokemon target) {
-        int index = items.indexOf(item);
-        if (index != -1) {
-            useItem(item, target);
-        } else {
-            System.out.println("Can't find the item.");
-        }
-    }
-    
 }

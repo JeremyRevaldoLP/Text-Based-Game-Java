@@ -1,34 +1,42 @@
 public class Item {
     private String name;
     private String description;
-    private int healAmount;  // Untuk item yang menyembuhkan
-    private String effect;   // Misal: "increase_attack", "increase_defense"
-    private int power;       // Berapa besar pengaruh efek
+    private int healAmount;
+    private String effect;
+    private int power;
+    private int quantity;
 
-    // Constructor untuk item penyembuh (misal Potion)
     public Item(String name, String description, int healAmount) {
         this.name = name;
         this.description = description;
         this.healAmount = healAmount;
-        this.effect = "heal";
-        this.power = healAmount;
+        this.effect = null;
+        this.power = 0;
+        this.quantity = 1;
     }
 
-    // Constructor untuk item dengan efek (misal X Attack)
     public Item(String name, String description, String effect, int power) {
         this.name = name;
         this.description = description;
-        this.healAmount = 0;
         this.effect = effect;
         this.power = power;
+        this.healAmount = 0;
+        this.quantity = 1;
     }
 
-    public String getName() {
-        return name;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public String getDescription() {
-        return description;
+    public void increaseQuantity(int amount) {
+        this.quantity += amount;
+    }
+
+    public void decreaseQuantity(int amount) {
+        this.quantity -= amount;
+        if (this.quantity < 0) {
+            this.quantity = 0;
+        }
     }
 
     public int getHealAmount() {
@@ -45,10 +53,6 @@ public class Item {
 
     @Override
     public String toString() {
-        if (effect != null) {
-            return name + " - " + effect + " (" + power + ")";
-        } else {
-            return name + " - heals " + healAmount + " HP";
-        }
+        return name + ": " + description + " (x" + quantity + ")";
     }
 }

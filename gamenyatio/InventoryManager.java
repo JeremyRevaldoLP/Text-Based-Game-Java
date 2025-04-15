@@ -1,17 +1,31 @@
 import java.util.Scanner;
 
 public class InventoryManager {
+    private static Inventory inventory = new Inventory(); // Shared inventory
 
-    public static void openInventory(Pokemon pokemon, Scanner scanner) {
-        System.out.println("--- Inventory ---");
-        pokemon.getInventory().showInventory();
+    // Show inventory items
+    public static void displayInventory() {
+        inventory.showInventory();
+    }
 
-        if (!pokemon.getInventory().getItems().isEmpty()) {
-            System.out.print("What would you do? (insert the number): ");
-            int choice = scanner.nextInt() - 1;
-            if (choice >= 0 && choice < pokemon.getInventory().getItems().size()) {
-                Item item = pokemon.getInventory().getItems().get(choice);
-                pokemon.getInventory().useItem(item, pokemon);
+    // This method can be called from BattleManager
+    public static void openInventory(Pokemon target, Scanner scanner) {
+        boolean usingInventory = true;
+
+        while (usingInventory) {
+            System.out.println("\n-- Inventory --");
+            inventory.showInventory();
+            System.out.println("Select item number to use (or 0 to go back):");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (choice == 0) {
+                usingInventory = false;
+            } else {
+                // Use index-based method to avoid "method not applicable" error
+                inventory.useItem(choice - 1, target);
+                usingInventory = false;
             }
         }
     }

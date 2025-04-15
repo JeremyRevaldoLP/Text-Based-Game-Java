@@ -15,7 +15,7 @@ public class BattleManager {
         rivalPokemon.resetBuffs();
 
         while (playerPokemon.isAlive() && rivalPokemon.isAlive()) {
-            System.out.println("\n---" + playerName + " Turn ---");
+            System.out.println("\n--- " + playerName + "'s Turn ---");
             System.out.println("What would you do?");
             System.out.println("1. Attack");
             System.out.println("2. Inventory");
@@ -36,29 +36,29 @@ public class BattleManager {
                 scanner.nextLine();
                 if (moveChoice >= 0 && moveChoice < moves.size()) {
                     Move playerMove = moves.get(moveChoice);
-                    DialogueManager.sayAuto(playerName, playerPokemon.name + " Use " + playerMove.name + "!");
+                    DialogueManager.sayAuto(playerName, playerPokemon.name + " uses " + playerMove.name + "!");
                     processMove(playerMove, playerPokemon, rivalPokemon, playerName);
                 } else {
-                    System.out.println("It's not valid.");
+                    System.out.println("Invalid move selection.");
                 }
             } else if (actionChoice == 2) {
                 InventoryManager.openInventory(playerPokemon, scanner);
             } else if (actionChoice == 3 && isWildBattle) {
-                System.out.println(playerName + " Trying to flee!");
+                System.out.println(playerName + " is trying to run!");
                 if (random.nextInt(100) < 50) {
-                    System.out.println(playerName + " You flee succesfully!");
-                    break;
+                    System.out.println(playerName + " fled successfully!");
+                    return;
                 } else {
-                    System.out.println(playerName + " You can't ran away!");
+                    System.out.println(playerName + " couldn't run away!");
                 }
             }
 
             if (!rivalPokemon.isAlive()) break;
 
-            System.out.println("\n---" + rivalName + " turn---");
+            System.out.println("\n--- " + rivalName + "'s Turn ---");
             List<Move> rivalMoves = rivalPokemon.moves;
             Move rivalMove = rivalMoves.get(random.nextInt(rivalMoves.size()));
-            DialogueManager.sayAuto(rivalName, rivalPokemon.name + " is using " + rivalMove.name + "!");
+            DialogueManager.sayAuto(rivalName, rivalPokemon.name + " uses " + rivalMove.name + "!");
             processMove(rivalMove, rivalPokemon, playerPokemon, rivalName);
 
             System.out.println("\nStatus:");
@@ -68,11 +68,20 @@ public class BattleManager {
 
         System.out.println("\n--- The battle ended ---");
         if (playerPokemon.isAlive()) {
-            System.out.println(playerName + " Won!");
+            System.out.println(playerName + " won!");
+        
+            int expGained;
+            if (isWildBattle) {
+                expGained = 5 + random.nextInt(3); // 5 to 7 EXP
+            } else {
+                expGained = 10 + random.nextInt(6); // 10 to 15 EXP for trainer/rival battles
+            }
+        
+            playerPokemon.gainExp(expGained);
         } else {
-            System.out.println(rivalName + " Won!");
+            System.out.println(rivalName + " won!");}
         }
-    }
+        
 
     private static void processMove(Move move, Pokemon attacker, Pokemon defender, String attackerName) {
         if (move.effect != null) {
@@ -81,9 +90,9 @@ public class BattleManager {
                     if (attacker.attackBuffCount < 2) {
                         attacker.attack += 2;
                         attacker.attackBuffCount++;
-                        DialogueManager.sayAuto(null, attacker.name + " increasing attack!");
+                        DialogueManager.sayAuto(null, attacker.name + " increased its attack!");
                     } else {
-                        DialogueManager.sayAuto(null, attacker.name + " can,t increase your attack anymore!");
+                        DialogueManager.sayAuto(null, attacker.name + " can't increase attack further!");
                     }
                     return;
 
@@ -91,9 +100,9 @@ public class BattleManager {
                     if (defender.attackDebuffCount < 2) {
                         defender.attack = Math.max(1, defender.attack - 2);
                         defender.attackDebuffCount++;
-                        DialogueManager.sayAuto(null, defender.name + " losing 2 attack!");
+                        DialogueManager.sayAuto(null, defender.name + " lost 2 attack!");
                     } else {
-                        DialogueManager.sayAuto(null, defender.name + " can't lose your defense anymore!");
+                        DialogueManager.sayAuto(null, defender.name + " can't lose more attack!");
                     }
                     return;
 
@@ -101,9 +110,9 @@ public class BattleManager {
                     if (attacker.defenseBuffCount < 2) {
                         attacker.defense += 2;
                         attacker.defenseBuffCount++;
-                        DialogueManager.sayAuto(null, attacker.name + " increasing defense!");
+                        DialogueManager.sayAuto(null, attacker.name + " increased its defense!");
                     } else {
-                        DialogueManager.sayAuto(null, attacker.name + " can't increase your defense anymore!");
+                        DialogueManager.sayAuto(null, attacker.name + " can't increase defense further!");
                     }
                     return;
 
@@ -111,9 +120,9 @@ public class BattleManager {
                     if (defender.defenseDebuffCount < 2) {
                         defender.defense = Math.max(1, defender.defense - 2);
                         defender.defenseDebuffCount++;
-                        DialogueManager.sayAuto(null, defender.name + " losing 2 defense!");
+                        DialogueManager.sayAuto(null, defender.name + " lost 2 defense!");
                     } else {
-                        DialogueManager.sayAuto(null, defender.name + " can't lose your defense anymore!");
+                        DialogueManager.sayAuto(null, defender.name + " can't lose more defense!");
                     }
                     return;
             }
@@ -122,7 +131,7 @@ public class BattleManager {
         int damage = calculateDamage(move, attacker, defender);
         defender.hp -= damage;
         if (defender.hp < 0) defender.hp = 0;
-        DialogueManager.sayAuto(null, "It's dealing " + damage + " damage!");
+        DialogueManager.sayAuto(null, "It dealt " + damage + " damage!");
     }
 
     private static int calculateDamage(Move move, Pokemon attacker, Pokemon defender) {
@@ -135,7 +144,6 @@ public class BattleManager {
         } else if (isNotVeryEffective(move.type, defender.type)) {
             DialogueManager.sayAuto(null, "It's not very effective...");
             damage /= 2;
-            if (damage < 1) damage = 1;
         }
 
         if (random.nextDouble() < 0.1) {
