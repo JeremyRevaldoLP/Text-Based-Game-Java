@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        TextUtils.typeWriter("=== Takut dan Lapar ===");
+        TextUtils.typeWriter("=== Fear and Hunger ===");
         TextUtils.typeWriter("Kegelapan menyelimuti tempat ini...");
 
         TextUtils.typeWriter("Masukkan nama karaktermu:");
