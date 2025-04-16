@@ -86,9 +86,9 @@ public class BattleManager {
 
             int expGained;
             if (isWildBattle) {
-                expGained = 5 + random.nextInt(3); // 5 to 7 EXP for wild battles
+                expGained = 20 + random.nextInt(3); // 5 to 7 EXP for wild battles
             } else {
-                expGained = 10 + random.nextInt(6); // 10 to 15 EXP for trainer battles
+                expGained = 30 + random.nextInt(6); // 10 to 15 EXP for trainer battles
             }
 
             playerPokemon.gainExp(expGained);

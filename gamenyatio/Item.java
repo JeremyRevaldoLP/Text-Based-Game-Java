@@ -12,7 +12,7 @@ public class Item {
         this.healAmount = healAmount;
         this.effect = null;
         this.power = 0;
-        this.quantity = 1;
+        this.quantity = 10;
     }
 
     public Item(String name, String description, String effect, int power) {
@@ -21,7 +21,7 @@ public class Item {
         this.effect = effect;
         this.power = power;
         this.healAmount = 0;
-        this.quantity = 1;
+        this.quantity = 5;
     }
 
     public int getQuantity() {
