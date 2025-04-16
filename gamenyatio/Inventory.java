@@ -7,8 +7,8 @@ public class Inventory {
     public Inventory() {
         this.items = new ArrayList<>();
         items.add(new Item("Potion", "Heals 20 HP", 20));
-        items.add(new Item("X Attack", "Increases attack", "increase_attack", 2));
-        items.add(new Item("X Defense", "Increases defense", "increase_defense", 2));
+        items.add(new Item("X Attack", "Increases attack", "increase_attack", 3));
+        items.add(new Item("X Defense", "Increases defense", "increase_defense", 3));
     }
 
     public void showInventory() {

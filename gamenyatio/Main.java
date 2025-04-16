@@ -113,10 +113,11 @@ public class Main {
 
             // Use the chosen Pokemon for the battle with the rival
             BattleManager.startBattle(playerName, chosen, rivalPokemon, "Irun", false);
+            chosen.resetToDefaultStats();
 
             // After the battle, Professor Jack talks to both players
-            DialogueManager.say(null, "=============", scanner);
-            DialogueManager.say("Prof. Jack", "Both of you are doing amazing, I hope you two can become Pokemon champions.", scanner);
+            DialogueManager.say(null, "=========================", scanner);
+            DialogueManager.say("Prof. Jack", "Both of you are doing amazing, here let me heal your pokemon. I hope you two can become Pokemon champions.", scanner);
             DialogueManager.say("Prof. Jack", "But sadly, the Pokemon Champion title is only for one person.", scanner);
             DialogueManager.say("Prof. Jack", "Now go, start your journey and come back when you become a Pokemon Champion.", scanner);
             DialogueManager.say("Prof. Jack", "And if you don't know where to go, I’ve already added the map for the whole Senova region to your PokeDevice.", scanner);
@@ -132,11 +133,12 @@ public class Main {
             boolean continueJourney = true;
 
             while (continueJourney) {
-                System.out.println("Where would you like to go?");
-                System.out.println("1. Route 138");
-                System.out.println("2. Route 56");
+                System.out.println("What would you like to do?");
+                System.out.println("1. I think I should go to route 138");
+                System.out.println("2. I think I should go to route 56");
+                System.out.println("3. Check your Pokemon status");
 
-                System.out.print("Choose your route (1 or 2): ");
+                System.out.print("Choose your route (1 or 3): ");
                 routeChoice = scanner.nextInt();
 
                 switch (routeChoice) {
@@ -155,6 +157,14 @@ public class Main {
                             continueJourney = true; // Go back to the main route selection
                         }
                         break;
+                    case 3:
+                        System.out.println("\n-- Your Pokemon's Status --");
+                        System.out.println("Name : " + chosen.name);
+                        System.out.println("Type : " + chosen.type);
+                        System.out.println("HP   : " + chosen.hp + " / " + chosen.maxHp);
+                        System.out.println("ATK  : " + chosen.attack);
+                        System.out.println("DEF  : " + chosen.defense);
+                        break; // tetap di loop ini, biar bisa pilih ulang
                     default:
                         System.out.println("Invalid choice. Please choose a valid route.");
                 }
@@ -162,18 +172,101 @@ public class Main {
         }
     }
 
-      // Method EncounterWildPokemon yang sudah diperbarui
-      private static void EncounterWildPokemon(Scanner scanner, Pokemon chosen, String playerName) {
-        String[] wildPokemon = {"Pidgey", "Wurmple", "Zigzagoon", "Ralts"};
-        int randomIndex = (int) (Math.random() * wildPokemon.length);
-        String wildPokemonName = wildPokemon[randomIndex];
+    private static void EncounterWildPokemon(Scanner scanner, Pokemon chosen, String playerName) {
+        boolean stayInRoute = true;
+    
+        while (stayInRoute) {
+            // Random wild Pokemon
+            String[] wildPokemon = {"Pidgey", "Wurmple", "Zigzagoon", "Ralts"};
+            int randomIndex = (int) (Math.random() * wildPokemon.length);
+            String wildPokemonName = wildPokemon[randomIndex];
+    
+            DialogueManager.say(null, "You encounter a wild " + wildPokemonName + "!", scanner);
+    
+            Pokemon wildPokemonInstance = new Pokemon(wildPokemonName, "Normal", 40, 10, 5,
+            Arrays.asList(
+                new Move("Tackle", "Normal", 10),
+                new Move("Bite", "Normal", 0, "increase_attack")  
+            ));
+    
+            BattleManager.startBattle(playerName, chosen, wildPokemonInstance, wildPokemonName, true);
+            chosen.resetStats();
 
-        DialogueManager.say(null, "You encounter a wild " + wildPokemonName + "!", scanner);
+            //  CEK apakah Pokemon kamu pingsan
+            if (chosen.isFainted()) {
+                DialogueManager.say(null, chosen.name + " has fainted!", scanner);
+                DialogueManager.say(null, "You rush back to the nearest Pokémon Center in Littleroot Town...", scanner);
+                DialogueManager.say("Nurse Joy", "Your Pokémon has been healed. Please take better care next time!", scanner);
+                chosen.healToFull();
+                stayInRoute = true; 
+                return;
+            }
 
-        // Create a wild Pokemon instance and initiate the battle
-        Pokemon wildPokemonInstance = new Pokemon(wildPokemonName, "Normal", 50, 10, 5, Arrays.asList(new Move("Tackle", "Normal", 10)));
+            boolean validChoice = false;
 
-        // Use playerName for the sender in the battle
-        BattleManager.startBattle(playerName, chosen, wildPokemonInstance, wildPokemonName, true);
-    }
-}
+            while (!validChoice) {
+                System.out.println("\nWhat would you like to do next?");
+                System.out.println("1. Continue your adventure to route 138");
+                System.out.println("2. Check your Pokémon status");
+                System.out.println("3. Leave the game");
+            
+                int choice = scanner.nextInt(); // Menangkap pilihan pemain
+            
+                switch (choice) {
+                    case 1:
+                        System.out.println("You decide to continue your adventure...");
+                        validChoice = true; // Lanjutkan ke encounter selanjutnya atau kembali ke menu petualangan
+                        break;
+                    case 2:
+                        System.out.println("\n-- Your Pokémon's Status --");
+                        System.out.println("Name : " + chosen.name);
+                        System.out.println("Type : " + chosen.type);
+                        System.out.println("HP   : " + chosen.hp + " / " + chosen.maxHp);
+                        System.out.println("ATK  : " + chosen.attack);
+                        System.out.println("DEF  : " + chosen.defense);
+                        break;
+                    case 3:
+                        System.out.println("You left the adventure. Goodbye!");
+                        stayInRoute = false; // Keluar dari permainan atau loop
+                        validChoice = true; // Keluar dari loop
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please choose again.");
+                        break;
+                }
+            }
+
+            
+            while (!validChoice) {
+                System.out.println("\nWhat would you do?");
+                System.out.println("1. Stay in Route 138");
+                System.out.println("2. Check your Pokemon status");
+                System.out.println("3. Leave the game");
+    
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // consume newline
+    
+                switch (choice) {
+                    case 1:
+                        System.out.println("You decide to stay in Route 138 and continue your adventure...");
+                        validChoice = true; // lanjut ke encounter selanjutnya
+                        break;
+                    case 2:
+                        System.out.println("\n-- Your Pokemon's Status --");
+                        System.out.println("Name : " + chosen.name);
+                        System.out.println("Type : " + chosen.type);
+                        System.out.println("HP   : " + chosen.hp + " / " + chosen.maxHp);
+                        System.out.println("ATK  : " + chosen.attack);
+                        System.out.println("DEF  : " + chosen.defense);
+                        break;
+                    case 3:
+                        System.out.println("You left the adventure. Goodbye!");
+                        stayInRoute = false;
+                        validChoice = true;
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please choose again.");
+                }
+            }
+        }
+    }}
