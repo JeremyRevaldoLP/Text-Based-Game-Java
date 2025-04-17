@@ -60,7 +60,7 @@ public class BattleManager {
             // example: if enemy attack attribute is like 20, its gonna multiply it by 0.85 so naturally damage output will not be 100% its gonna reduce to 85%
             int damage = enemy.attack;
             if (playerChoseDefend) {
-                damage = (int)(damage * 0.85);
+                damage = (int)(damage * 0.55);
             }
             
             TextUtils.typeWriter("\nThe " + enemy.name + " attacks " + player.name + " for " + damage + " damage");
