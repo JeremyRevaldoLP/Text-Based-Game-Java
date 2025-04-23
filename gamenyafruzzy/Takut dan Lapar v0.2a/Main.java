@@ -1,6 +1,4 @@
 import java.util.Scanner;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,8 +6,11 @@ public class Main {
         
         // Main game loop
         while(true) {
+
+            SkillUnlockTracker tracker = new SkillUnlockTracker();
+
             showTitle(scanner); // Pass scanner to title screen
-            
+
             // Game setup
             TextUtils.typeWriter("\nA voice echoes in your head...", 50);
             TextUtils.typeWriter("The fear and hunger dungeon slowly corrupt your mind...", 40);
@@ -27,21 +28,37 @@ public class Main {
             // Battle sequence
             BattleManager battleManager = new BattleManager(scanner);
 
-            TextUtils.typeWriter("\nThe stench of decay fills the air...", 70);
-            TextUtils.typeWriter("A guard shambles toward you!", 30);
-            TextUtils.typeWriter("Its rusted sword gleams dully...", 50);
+            TextUtils.typeWriter("\nThe smell of decay fills the air...", 70);
+            TextUtils.typeWriter("A guard runs toward you!", 30);
+            TextUtils.typeWriter("Its rusted sword glows no more...", 50);
             battleManager.battle(player, enemy1);
             
             if (player.isAlive()) {
+                TextUtils.typeWriter("\nThe guard's body lies still...");
+                TextUtils.typeWriter("You hear a whisper...");
+                System.out.println("1. Walk away from the corpse");
+                System.out.println("2. Pray for safety");
+                TextUtils.typeWriter("How do you feel? (1 or 2): ");
+                tracker.choiceAfterGuard = getValidClassChoice(scanner); 
+
                 TextUtils.typeWriter("\nA growl echoes through the halls...", 70);
                 TextUtils.typeWriter("a creature crawls from the darkness", 30);
-                TextUtils.typeWriter("Its gaping mouth drips with hunger...", 50);
+                TextUtils.typeWriter("Its mouth drips with hunger...", 50);
                 battleManager.battle(player, enemy2);
             }
 
             if (player.isAlive()) {
+                TextUtils.typeWriter("\nThe Maw melts into the shadow...");
+                TextUtils.typeWriter("You feel the dungeons eyes on you.");
+                System.out.println("1. Laugh in the darkness");
+                System.out.println("2. Remain silent");
+                TextUtils.typeWriter("What do you do? (1 or 2): ");
+                tracker.choiceAfterMaw = getValidClassChoice(scanner);
+
+                applyUnlockedSkill(player, tracker);
+
                 TextUtils.typeWriter("\nYou run desperately, searching for an escape from this hell...", 70);
-                TextUtils.typeWriter("Your thoughts fracture as you try to comprehend this twisted dungeon", 30);
+                TextUtils.typeWriter("Your thoughts cant comprehend this twisted dungeon", 30);
                 TextUtils.typeWriter("A terrifying presence emerges from the shadows.", 50);
                 battleManager.battle(player, boss);
             }
@@ -49,6 +66,69 @@ public class Main {
             if (player.isAlive()) {
                 showVictory(playerName);
                 // Will automatically loop back to title screen
+            }
+        }
+    }
+
+    private static void applyUnlockedSkill(Character player, SkillUnlockTracker tracker) {
+        int code = tracker.getComboCode();
+        String className = player.characterClass;
+
+        TextUtils.typeWriter("\nA memory awakens deep inside you...");
+        TextUtils.typeWriter("You remember who you are.");
+    
+        if (className.equals("Guard")) {
+            switch (code) {
+                case 11: player.cooldowns.put("Iron Wall", 0);
+                player.unlockedSkillName = "Iron Wall";
+                player.unlockedSkillDescription = "Iron Wall: Block all damage for 2 turns";
+                TextUtils.typeWriter("Unlocked skill: " + player.unlockedSkillDescription); 
+                break;
+
+                case 12: player.cooldowns.put("Boost", 0); 
+                player.unlockedSkillName = "Boost";
+                player.unlockedSkillDescription = "Boost: Next attack deals 50% more damage";
+                TextUtils.typeWriter("Unlocked skill: " + player.unlockedSkillDescription);
+                break;
+
+                case 21: player.applyFortify();
+                player.unlockedSkillName = "Fortify=";
+                player.unlockedSkillDescription = "Fortify: (Passive): Max HP and HP increased by 10";
+                TextUtils.typeWriter("Unlocked passive: " + player.unlockedSkillDescription);
+                break; 
+
+                case 22: player.cooldowns.put("Last Bastion", 0);
+                player.unlockedSkillName = "Last Bastion";
+                player.unlockedSkillDescription = "Last Bastion: Cannot die for 2 turns"; 
+                TextUtils.typeWriter("Unlocked skill: " + player.unlockedSkillDescription);
+                break;
+            }
+
+        } else if (className.equals("Prisoner")) {
+            switch (code) {
+                case 11: player.cooldowns.put("Backstab", 0); 
+                player.unlockedSkillName = "Backstab";
+                player.unlockedSkillDescription = "Backstab: Deal bonus damage (more if enemy HP < 50%)";
+                TextUtils.typeWriter("Unlocked skill: " + player.unlockedSkillDescription);
+                break;
+
+                case 12: player.cooldowns.put("It's Either You or Me", 0); 
+                player.unlockedSkillName = "It's Either You or Me";
+                player.unlockedSkillDescription = "It's Either You or Me: 50/50 chance to reduce someone to 1 HP";
+                TextUtils.typeWriter("Unlocked skill: " + player.unlockedSkillDescription);
+                break;
+
+                case 21: player.cooldowns.put("Bleak Strike", 0); 
+                player.unlockedSkillName = "Bleak Strike";
+                player.unlockedSkillDescription = "Bleak Strike: Deal 120% damage and gain +10 evasion";
+                TextUtils.typeWriter("Unlocked skill: " + player.unlockedSkillDescription);
+                break;
+
+                case 22: player.cooldowns.put("Lifesteal", 0);
+                player.unlockedSkillName = "Lifesteal";
+                player.unlockedSkillDescription = "Lifesteal: Deal damage and heal the same amount"; 
+                TextUtils.typeWriter("Unlocked skill: " + player.unlockedSkillDescription);
+                break;
             }
         }
     }
@@ -95,7 +175,7 @@ public class Main {
     }
 
     private static Character chooseClass(Scanner scanner, String playerName) {
-        TextUtils.typeWriter("\nChoose your wretched past:", 40);
+        TextUtils.typeWriter("\nChoose your past:", 40);
         System.out.println("1. Guard");
         System.out.println("2. Prisoner");
         TextUtils.typeWriter("Enter your choice (1 or 2): ");
